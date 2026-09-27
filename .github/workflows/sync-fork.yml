@@ -1,0 +1,26 @@
+name: Sincronizar fork con el original
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # cada 6 horas
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Obtener el fork
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Sincronizar con el repositorio original
+        run: |
+          git remote add upstream https://github.com/marianoluzza/mision-software.git
+          git fetch upstream main
+          git push origin upstream/main:main
